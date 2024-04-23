@@ -1,0 +1,66 @@
+import numpy as np
+import pandas as pd
+
+def Xor(w11, w12, w21, w22, v1, v2, b1, b2, b3, count=0, learning_rate = 0.5):
+    while(count<=4):
+        print("\n")
+        xi = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        outputs = []
+        for x in xi:
+            target = -1 if (x[0] ^ x[1]) == 0 else 1
+            # Calculate zin1 and zin2
+            zin1 = x[0] * w11 + x[1] * w21 + b1
+            zin2 = x[0] * w12 + x[1] * w22 + b2
+
+            # Activation function: z=1 if >=0 else 1 
+            activation = lambda z: 1 if z >= 0 else -1
+
+            # Apply activation function to zin1 and zin2
+            z1 = activation(zin1)
+            z2 = activation(zin2)
+
+            # Calculate yin
+            yin = (z1 * v1) + (z2 * v2) + b3
+            y = activation(yin)
+      
+            #if target if -ve update both inputs
+            if y != target and target==-1:
+                    w11 = w11 + learning_rate * (target - zin1) * x[0]
+                    w21 = w21 + learning_rate * (target - zin1) * x[1]
+                    b1 = b1 + learning_rate * (target - zin1)
+                    w12 = w12 + learning_rate * (target - zin2) * x[0]
+                    w22 = w22 + learning_rate * (target - zin2) * x[1]
+                    b2 = b2 + learning_rate * (target - zin2)
+            #if target if +ve update input close to zero
+            else:
+                zin1_diff = 0-zin1
+                zin2_diff = 0-zin2
+                if(zin1_diff <  zin2_diff):
+                    w11 = w11 + learning_rate * (target - zin1) * x[0]
+                    w21 = w21 + learning_rate * (target - zin1) * x[1]
+                    b1 = b1 + learning_rate * (target - zin1)
+                else:
+                    w12 = w12 + learning_rate * (target - zin2) * x[0]
+                    w22 = w22 + learning_rate * (target - zin2) * x[1]
+                    b2 = b2 + learning_rate * (target - zin2)
+                
+            outputs.append([x[0], x[1],target, zin1, zin2, z1, z2, yin, y, w11, w21, b1, w12, w22, b2])
+            # Display results
+        output_frame = pd.DataFrame(outputs, columns=['Input1', 'Input2', 'Target', 'zin1', 'zin2','Z1', 'Z2', 'Yin', 'Output', 'w11', 'w21', 'b1', 'w12', 'w22', 'b2'])
+        print(output_frame.to_string(index=False))
+        if output_frame['Target'].equals(output_frame['Output']):
+            print("Target and Output columns matched.")
+            break
+        count=count+1
+
+w11 = 0.05
+w12 = 0.1
+w21 = 0.2
+w22 = 0.2
+v1 = 0.5
+v2 = 0.5
+b1 = 0.3
+b2 = 0.15
+b3 = 0.5
+# Run the XOR function
+Xor(w11, w12, w21, w22, v1, v2, b1, b2, b3,0)

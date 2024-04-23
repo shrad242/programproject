@@ -1,0 +1,62 @@
+import random
+
+POPULATION_SIZE = 10
+MAX_GENERATIONS = 7
+CROSSOVER_PROBABILITY = 0.7
+MUTATION_PROBABILITY = 0.1
+def objective_function(x1, x2):
+return 4 * x1 + 3 * x2
+def initialize_population():
+print("Initial Population")
+population = []
+for i in range(POPULATION_SIZE):
+xl = random.uniform(0, 2)
+x2 = random.uniform(0, 2)
+population.append((xl, x2))
+print(f"{i} xl: {xl} x2: {x2}")
+return population
+def crossover(xl1, xl2, x21, x22):
+a = random.random()
+new_xl = a * xl1 + (1 - a) * xl2
+new_x2 = a * x21 + (1 - a) * x22
+return new_xl, new_x2
+def mutation(x):
+if random.random() <= MUTATION_PROBABILITY:
+delta = random.uniform(-1, 1)
+x += delta
+return x
+def main():
+population = initialize_population()
+max_val = 0
+max_xl, max_x2 = 0, 0
+for generation in range(MAX_GENERATIONS):
+print(f"\nAfter {generation} generation")
+# Evaluation
+for i, (xl, x2) in enumerate(population):
+sum_val = objective_function(xl, x2)
+print(f"{i} xl: {xl} x2: {x2} sum: {sum_val}")
+if sum_val > max_val:
+max_val = sum_val
+max_xl, max_x2 = xl, x2
+# Crossover
+for i in range(0, POPULATION_SIZE, 2):
+if random.random() <= CROSSOVER_PROBABILITY:
+xl1, x21 = population[i]
+xl2, x22 = population[i + 1]
+new_xl, new_x2 = crossover(xl1, xl2, x21, x22)
+population[i] = (new_xl, new_x2)
+population[i + 1] = (new_xl, new_x2)
+# Mutation
+for i in range(POPULATION_SIZE):
+xl, x2 = population[i]
+xl = mutation(xl)
+x2 = mutation(x2)
+population[i] = (xl, x2)
+# Output
+print("\nTHE SOLUTION OF THE FOLLOWING PROBLEM IS")
+print("SUM: MAXIMIZE F(xl, x2) = 4xl + 3x2")
+print("2*x1 + 3*x2 <= 6\n-3*x1 + 2*x2 <= 3\n2*x1 + x2 <= 4")
+print(f"xl: {max_xl} x2: {max_x2} Max: {max_val}")
+
+if __name__ == "__main__":
+main()

@@ -1,0 +1,40 @@
+A = dict()
+B = dict()
+Y = dict()
+Z = dict()
+A = {"A": 0.2, "B": 0.3, "C": 0.6, "D": 0.6}
+B = {"A": 0.9, "B": 0.9, "C": 0.4, "D": 0.5}
+
+print('The 1st Fuzzy Set is :', A)
+print('The 2nd Fuzzy Set is :', B)
+
+#union
+for A_key, B_key in zip(A, B):
+	if A[A_key] > B[B_key]:
+		Y[A_key] = A[A_key]
+	else:
+		Y[B_key] = B[B_key]
+print('\nFuzzy Set Union is :', Y)
+
+#intersection
+for A_key, B_key in zip(A, B):
+    if A[A_key] < B[B_key]:
+        Y[A_key] = A[A_key]
+    else:
+        Y[B_key] = B[B_key]
+print('\nFuzzy Set Intersection is :', Y)
+
+# Complement
+for A_key in A:
+    Y[A_key] = round(1 - A[A_key], 2)
+    Z[A_key] = round(1 - B[A_key], 2)
+print('\nFuzzy Set Complement of A :', Y)
+print('\nFuzzy Set Complement of B :', Z)
+
+# Difference
+for A_key, B_key in zip(A, B):
+    if A[A_key] < (1 - B[B_key]):
+        Y[A_key] = round(A[A_key], 2)
+    else:
+        Y[B_key] = round(1-B[B_key], 2)
+print('\nFuzzy Set Difference is :', Y)

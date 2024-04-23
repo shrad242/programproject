@@ -1,0 +1,29 @@
+import numpy as np
+import pandas as pd
+def cal_output_and(w1, w2, learning_rate, threshold=1):
+    bias = 0
+    xi = [(0, 0), (0, 1), (1, 0), (1, 1)]
+    outputs = []
+    for x in xi:
+        linear_combination = w1 * x[0] + w2 * x[1] + bias
+        output = int(linear_combination >= threshold)
+        target_output = x[0] or x[1]
+        if output != target_output:
+            w1 = w1 + learning_rate * (target_output - output) * x[0]
+            w2 = w2 + learning_rate * (target_output - output) * x[1]
+            outputs = []  # Clear outputs when weights are updated
+            cal_output_and(w1, w2, learning_rate)
+            return
+        outputs.append([x[0], x[1], linear_combination, output])
+
+    output_frame = pd.DataFrame(outputs, columns=['Input 1', 'Input 2', 'Linear Combination', 'Activation Output'])
+    print(f'Results for threshold: {threshold} \n')
+    print(f'Results for w1: {w1} \n')
+    print(f'Results for w2: {w2} \n')
+    print(f'Results for learning_rate: {learning_rate} \n')
+    print(output_frame.to_string(index=False))
+
+w1 = 0.6
+w2 = 0.6
+learning_rate = 0.5
+cal_output_and(w1, w2, learning_rate)

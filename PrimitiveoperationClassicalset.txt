@@ -1,0 +1,23 @@
+A = {1, 2, 3}
+B = {3, 5, 6}
+
+# Union
+union_set = A | B
+print(f'Union (A ∪ B): {union_set}')
+
+# Intersection
+intersection_set = A & B
+print(f'Intersection (A ∩ B): {intersection_set}')
+
+# Complement
+universal_set = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+complement_A = universal_set - A
+print(f'Complement of A (A\'): {complement_A}')
+
+# Difference
+difference_set = A - B
+print(f'Difference (A \ B): {difference_set}')
+
+# Cartesian Product
+cartesian_product = {(a, b) for a in A for b in B}
+print(f'Cartesian Product (A × B): {cartesian_product}')

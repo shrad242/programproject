@@ -1,0 +1,31 @@
+import numpy as np
+import pandas as pd
+def cal_output_and(w1, w2, learning_rate, bias, MaxErr=1):
+    xi = [(1, 1), (1, 0), (0, 1), (0, 0)]
+    outputs = []
+    terr=0
+    for x in xi:
+        linear_combination = w1 * x[0] + w2 * x[1] + bias
+        target_output = x[0] * x[1]
+        diff_output = target_output - linear_combination
+        error = pow(diff_output, 2)
+        terr=error+terr
+        w1 = w1 + learning_rate * diff_output * x[0]
+        w2 = w2 + learning_rate * diff_output * x[1]
+        bias = bias + learning_rate * diff_output
+        outputs.append([x[0], x[1], linear_combination, target_output,w1,w2,bias,error])
+
+    print("Total Error after processing all examples:", terr )  # Corrected total error calculation
+    output_frame = pd.DataFrame(outputs, columns=['Input 1', 'Input 2', 'Actual Output', 'Target Output', 'w1', 'w2', 'bias', 'Error'])
+    print(output_frame.to_string(index=False))
+
+    if MaxErr < terr:
+        print("Convergence achieved. Error:", terr)
+        print("\nNext Epoch")
+        cal_output_and(w1, w2, learning_rate, bias)
+        return
+w1 = 1
+w2 = 1
+learning_rate = 0.2
+bias = 0.5
+cal_output_and(w1, w2, learning_rate, bias)
